@@ -2,6 +2,7 @@
 
 package chiseltest.formal.backends
 
+import chiseltest.formal.backends.pono.PonoModelChecker
 import chiseltest.formal.backends.btor.BtormcModelChecker
 import chiseltest.formal.backends.smt._
 import chiseltest.formal.{DoNotModelUndef, DoNotOptimizeFormal, FailedBoundedCheckException}
@@ -29,6 +30,11 @@ case object Z3EngineAnnotation extends FormalEngineAnnotation
   * @note btormc is generally faster than Z3 or CVC4 but needs to be built from source
   */
 case object BtormcEngineAnnotation extends FormalEngineAnnotation
+
+/** Uses the pono model checker 
+ *  @note pono is faster than btormc, and similar to btormc, needs to be built from source.
+ */
+case object PonoEngineAnnotation extends FormalEngineAnnotation
 
 /** Formal Verification based on the firrtl compiler's SMT backend and the maltese SMT libraries solver bindings. */
 private[chiseltest] object Maltese {
@@ -141,6 +147,7 @@ private[chiseltest] object Maltese {
       case CVC4EngineAnnotation   => new SMTModelChecker(CVC4SMTLib)
       case Z3EngineAnnotation     => new SMTModelChecker(Z3SMTLib)
       case BtormcEngineAnnotation => new BtormcModelChecker(targetDir)
+      case PonoEngineAnnotation => new PonoModelChecker(targetDir)
     }
   }
 
